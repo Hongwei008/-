@@ -19,7 +19,9 @@
 基本形式为：['卖出','股票代码',交易价格,交易数量]，如['卖出','sz300498',14.33,100]。
 
 （三）最近一次及历史操作  
-目前只实现桌面文本提示，效果图如下。后面有需要再慢慢添加其他功能。
+找到stockOperationAnalysis.py里的recent_operation和history_records列表，将买入、卖出操作加到列表中即可。
+
+目前只实现桌面文本提示，效果图如下。后面有需要再慢慢添加其他功能，比如将操作记录放入数据库、通过input方式加入操作记录、用tkinter做展示、加入图表分析等。
 
 
 ![image](https://github.com/Hongwei008/stock-operation-analysis/blob/main/%E6%95%88%E6%9E%9C%E5%9B%BE.png)
