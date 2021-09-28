@@ -5,4 +5,4 @@
 
 目前只实现桌面文本提示，效果图如下。后面有需要再慢慢添加其他功能。
 
-![image](https://github.com/Hongwei008/stock-operation-analysis/edit/main/README.md)
+![image](https://github.com/Hongwei008/stock-operation-analysis/blob/main/%E6%95%88%E6%9E%9C%E5%9B%BE.png)
