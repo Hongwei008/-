@@ -82,7 +82,7 @@ def recentAnalysis(records):
 		text=text0+text
 		profit=profit1+profit0
 	#str1=" 买入收益：{:.2f}，卖出收益：{:.2f}，今日操作收益：{:.2f}".format(profit1,profit0,profit)
-	str1=" 今日操作收益：{:.2f}".format(profit)
+	str1="今日操作收益：{:.2f}".format(profit)
 	text=text+str1
 	return text,profit
 
