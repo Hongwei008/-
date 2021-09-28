@@ -1,4 +1,5 @@
 #coding=gbk
+#Copyright@Hongwei008
 import requests
 import time
 import sys
@@ -12,7 +13,7 @@ def get_name(code):
 		
 		return name
 	else:
-		return "´úÂëÓÐÎó"
+		return "ä»£ç æœ‰è¯¯"
 		
 def get_price(code):
 	r = requests.get("http://hq.sinajs.cn/list=%s" % (code))
@@ -22,7 +23,7 @@ def get_price(code):
 		
 		return now[:-1]
 	else:
-		return "´úÂëÓÐÎó"
+		return "ä»£ç æœ‰è¯¯"
 		
 def get_rate(code):
 	r = requests.get("http://hq.sinajs.cn/list=%s" % (code))
@@ -31,18 +32,18 @@ def get_rate(code):
 		buy5=int(r.text.split(',')[12])+int(r.text.split(',')[14])+int(r.text.split(',')[16])+int(r.text.split(',')[18])+int(r.text.split(',')[10])
 		sell5=int(r.text.split(',')[22])+int(r.text.split(',')[24])+int(r.text.split(',')[26])+int(r.text.split(',')[28])+int(r.text.split(',')[20])
 		if buy5>sell5:
-			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'¡ü'*int(buy5/sell5)
+			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'â†‘'*int(buy5/sell5)
 		else:
-			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'¡ý'*int(sell5/buy5)
+			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'â†“'*int(sell5/buy5)
 		return rate
 	else:
-		return "´úÂëÓÐÎó"
+		return "ä»£ç æœ‰è¯¯"
 		
 def buying_analysis(record):
 	code=record[1]
 	price=record[2]
 	volume=record[3]
-	str0=get_name(code)+" "+get_price(code)+" "+get_rate(code)+" ÂòÈëÊÕÒæ£º{:.2f}".format(volume*(float(get_price(code))-price))+" | "
+	str0=get_name(code)+" "+get_price(code)+" "+get_rate(code)+" ä¹°å…¥æ”¶ç›Šï¼š{:.2f}".format(volume*(float(get_price(code))-price))+" | "
 	profit=volume*(float(get_price(code))-price)
 	return str0,profit
 
@@ -50,19 +51,19 @@ def selling_analysis(record):
 	code=record[1]
 	price=record[2]
 	volume=record[3]
-	str0=get_name(code)+" "+get_price(code)+" "+get_rate(code)+" Âô³öÊÕÒæ£º{:.2f}".format(volume*(-float(get_price(code))+price))+" | "
+	str0=get_name(code)+" "+get_price(code)+" "+get_rate(code)+" å–å‡ºæ”¶ç›Šï¼š{:.2f}".format(volume*(-float(get_price(code))+price))+" | "
 	profit=volume*(-float(get_price(code))+price)
 	return str0,profit
 
 def historyAnalysis(records):
 	profit=0
 	for record in records:
-		if record[0]=='ÂòÈë':
+		if record[0]=='ä¹°å…¥':
 			text0,profit2=buying_analysis(record)
 		else:
 			text0,profit2=selling_analysis(record)
 		profit=profit+profit2
-	str0="£¬ÀúÊ·ÊÕÒæ£º{:.2f}".format(profit)
+	str0="ï¼ŒåŽ†å²æ”¶ç›Šï¼š{:.2f}".format(profit)
 	
 	return str0,profit
 
@@ -72,7 +73,7 @@ def recentAnalysis(records):
 	profit0=0
 	profit1=0
 	for record in records:
-		if record[0]=='ÂòÈë':
+		if record[0]=='ä¹°å…¥':
 			text0,profit2=buying_analysis(record)
 			profit1=profit1+profit2
 		else:
@@ -80,14 +81,14 @@ def recentAnalysis(records):
 			profit0=profit0+profit2
 		text=text0+text
 		profit=profit1+profit0
-	#str1=" ÂòÈëÊÕÒæ£º{:.2f}£¬Âô³öÊÕÒæ£º{:.2f}£¬½ñÈÕ²Ù×÷ÊÕÒæ£º{:.2f}".format(profit1,profit0,profit)
-	str1=" ½ñÈÕ²Ù×÷ÊÕÒæ£º{:.2f}".format(profit)
+	#str1=" ä¹°å…¥æ”¶ç›Šï¼š{:.2f}ï¼Œå–å‡ºæ”¶ç›Šï¼š{:.2f}ï¼Œä»Šæ—¥æ“ä½œæ”¶ç›Šï¼š{:.2f}".format(profit1,profit0,profit)
+	str1=" ä»Šæ—¥æ“ä½œæ”¶ç›Šï¼š{:.2f}".format(profit)
 	text=text+str1
 	return text,profit
 
-history_records=[['Âô³ö','sz300766',14.68,20000],['ÂòÈë','sz300766',14.88,19700],['Âô³ö','sz300766',14.51,19700],['ÂòÈë','sz300766',14.36,19800],['Âô³ö','sz300766',14.40,19800],['ÂòÈë','sz300766',13.94,19800],['Âô³ö','sz300987',34,8300],['ÂòÈë','sz300766',13.02,20000],['ÂòÈë','sz300987',31.688,8300],['Âô³ö','sz300766',13.3,20000]]
-recent_operation=[['ÂòÈë','sz300498',14.33,15300],['Âô³ö','sz300766',13.01,20000]]
-input("ÈÎÒâ¼ü¿ªÊ¼")
+history_records=[['å–å‡º','sz300766',14.68,20000],['ä¹°å…¥','sz300766',14.88,19700],['å–å‡º','sz300766',14.51,19700],['ä¹°å…¥','sz300766',14.36,19800],['å–å‡º','sz300766',14.40,19800],['ä¹°å…¥','sz300766',13.94,19800],['å–å‡º','sz300987',34,8300],['ä¹°å…¥','sz300766',13.02,20000],['ä¹°å…¥','sz300987',31.688,8300],['å–å‡º','sz300766',13.3,20000]]
+recent_operation=[['ä¹°å…¥','sz300498',14.33,15300],['å–å‡º','sz300766',13.01,20000]]
+input("ä»»æ„é”®å¼€å§‹")
 os.system("cls")
 
 
@@ -98,7 +99,7 @@ while True:
 		
 		recent_text,recent_profit=recentAnalysis(recent_operation)
 		
-		text=recent_text+history_text+"£¬²Ù×÷×ÜÊÕÒæ£º{:.2f}".format(history_profit+recent_profit)
+		text=recent_text+history_text+"ï¼Œæ“ä½œæ€»æ”¶ç›Šï¼š{:.2f}".format(history_profit+recent_profit)
 		
 		msg="{} | {}".format(time.strftime("%H:%M:%S", time.localtime()),text)
 		if len(msg)>=len(msg0):
