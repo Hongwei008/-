@@ -105,7 +105,7 @@ while True:
 		if len(msg)>=len(msg0):
 			sys.stdout.write("\r{}".format(msg))
 		else:
-			blanks=" "*(len(msg0)-len(msg))
+			blanks="  "*(len(msg0)-len(msg))
 			sys.stdout.write("\r{}{}".format(msg,blanks))
 		msg0=msg
 		sys.stdout.flush()
