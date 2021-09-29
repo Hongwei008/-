@@ -29,8 +29,8 @@ def get_rate(code):
 	r = requests.get("http://hq.sinajs.cn/list=%s" % (code))
 	res = r.text.split(',')
 	if len(res) > 1:
-		buy5=int(r.text.split(',')[12])+int(r.text.split(',')[14])+int(r.text.split(',')[16])+int(r.text.split(',')[18])+int(r.text.split(',')[10])
-		sell5=int(r.text.split(',')[22])+int(r.text.split(',')[24])+int(r.text.split(',')[26])+int(r.text.split(',')[28])+int(r.text.split(',')[20])
+		buy5=float(0.3*int(r.text.split(',')[10])+0.3*int(r.text.split(',')[12])+0.2*int(r.text.split(',')[14])+0.1*int(r.text.split(',')[16])+0.1*int(r.text.split(',')[18]))
+		sell5=float(0.3*int(r.text.split(',')[20])+0.3*int(r.text.split(',')[22])+0.2*int(r.text.split(',')[24])+0.1*int(r.text.split(',')[26])+0.1*int(r.text.split(',')[28]))
 		if buy5>sell5:
 			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'↑'*int(buy5/sell5)
 		else:
@@ -81,13 +81,13 @@ def recentAnalysis(records):
 			profit0=profit0+profit2
 		text=text0+text
 		profit=profit1+profit0
-	#str1=" 买入收益：{:.2f}，卖出收益：{:.2f}，今日操作收益：{:.2f}".format(profit1,profit0,profit)
-	str1="今日操作收益：{:.2f}".format(profit)
+	#str1=" 买入收益：{:.2f}，卖出收益：{:.2f}，本次操作收益：{:.2f}".format(profit1,profit0,profit)
+	str1="本次操作收益：{:.2f}".format(profit)
 	text=text+str1
 	return text,profit
 
 history_records=[['卖出','sz300766',14.68,20000],['买入','sz300766',14.88,19700],['卖出','sz300766',14.51,19700],['买入','sz300766',14.36,19800],['卖出','sz300766',14.40,19800],['买入','sz300766',13.94,19800],['卖出','sz300987',34,8300],['买入','sz300766',13.02,20000],['买入','sz300987',31.688,8300],['卖出','sz300766',13.3,20000]]
-recent_operation=[['买入','sz300498',14.33,15300],['卖出','sz300766',13.01,20000]]
+recent_operation=[['买入','sz300498',14.324,18100],['卖出','sz300766',13.01,20000]]
 input("任意键开始")
 os.system("cls")
 
