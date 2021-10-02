@@ -34,3 +34,9 @@
 为了在手机上也能实时看到收益情况，利用Pythonista做了一个小组件。代码见stockOperationAnalysisIos.py，效果图见下：  
 
 ![image](https://github.com/Hongwei008/stock-operation-analysis/blob/main/ios%E6%95%88%E6%9E%9C%E5%9B%BE.jpg)
+
+二、windows设备  
+
+在实现ios设备上查看实时收益功能的时候，发现手机上从新浪api获取数据的速度较慢，严重影响程序速度。因此将原代码（stockOperationAnalysis.py）做了优化。主要是将历史操作、最近操作的股票的  
+实时数据从最底层的函数中剥离出来，放到最上一层，一次性从历史操作数据、最近操作数据中读取涉及的股票代码，并从新浪api获取数据以备分析。优化后，运行速度提升了近7倍。
+
