@@ -5,79 +5,70 @@ import time
 import sys
 import os
 
-def get_name(code):
-	r = requests.get("http://hq.sinajs.cn/list=%s" % (code))
-	res = r.text.split(',')
-	if len(res) > 1:
-		name= r.text.split(',')[0][21:]
+def getName(record,history_str):
+	name= (history_str[record[1]])[0][21:]
+
+	return name
+
 		
-		return name
+def getPrice(record,history_str):
+	
+	now= (history_str[record[1]])[3]
+
+	return now[:-1]
+	
+def getRate(record,history_str):
+	
+	buy5=float(0.3*int((history_str[record[1]])[10])+0.3*int((history_str[record[1]])[12])+0.2*int((history_str[record[1]])[14])+0.1*int((history_str[record[1]])[16])+0.1*int((history_str[record[1]])[18]))
+	sell5=float(0.3*int((history_str[record[1]])[20])+0.3*int((history_str[record[1]])[22])+0.2*int((history_str[record[1]])[24])+0.1*int((history_str[record[1]])[26])+0.1*int((history_str[record[1]])[28]))
+	if buy5>sell5:
+		rate= str(format(float((history_str[record[1]])[3])/float((history_str[record[1]])[2])-1,'.2%'))+'↑'*int(buy5/sell5)
 	else:
-		return "代码有误"
+		rate= str(format(float((history_str[record[1]])[3])/float((history_str[record[1]])[2])-1,'.2%'))+'↓'*int(sell5/buy5)
+	
+	return rate
+
 		
-def get_price(code):
-	r = requests.get("http://hq.sinajs.cn/list=%s" % (code))
-	res = r.text.split(',')
-	if len(res) > 1:
-		now= r.text.split(',')[3]
-		
-		return now[:-1]
-	else:
-		return "代码有误"
-		
-def get_rate(code):
-	r = requests.get("http://hq.sinajs.cn/list=%s" % (code))
-	res = r.text.split(',')
-	if len(res) > 1:
-		buy5=float(0.3*int(r.text.split(',')[10])+0.3*int(r.text.split(',')[12])+0.2*int(r.text.split(',')[14])+0.1*int(r.text.split(',')[16])+0.1*int(r.text.split(',')[18]))
-		sell5=float(0.3*int(r.text.split(',')[20])+0.3*int(r.text.split(',')[22])+0.2*int(r.text.split(',')[24])+0.1*int(r.text.split(',')[26])+0.1*int(r.text.split(',')[28]))
-		if buy5>sell5:
-			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'↑'*int(buy5/sell5)
-		else:
-			rate= str(format(float(r.text.split(',')[3])/float(r.text.split(',')[2])-1,'.2%'))+'↓'*int(sell5/buy5)
-		return rate
-	else:
-		return "代码有误"
-		
-def buying_analysis(record):
+def buyingAnalysis(record,history_str):
 	code=record[1]
 	price=record[2]
 	volume=record[3]
-	str0=get_name(code)+" "+get_price(code)+" "+get_rate(code)+" 买入收益：{:.2f}".format(volume*(float(get_price(code))-price))+" | "
-	profit=volume*(float(get_price(code))-price)
+	str0=getName(record,history_str)+" "+getPrice(record,history_str)+" "+getRate(record,history_str)+" 买入收益：{:.2f}".format(volume*(float(getPrice(record,history_str))-price))+" | "
+	profit=volume*(float(getPrice(record,history_str))-price)
 	return str0,profit
 
-def selling_analysis(record):
+def selling_analysis(record,history_str):
 	code=record[1]
 	price=record[2]
 	volume=record[3]
-	str0=get_name(code)+" "+get_price(code)+" "+get_rate(code)+" 卖出收益：{:.2f}".format(volume*(-float(get_price(code))+price))+" | "
-	profit=volume*(-float(get_price(code))+price)
+	str0=getName(record,history_str)+" "+getPrice(record,history_str)+" "+getRate(record,history_str)+" 卖出收益：{:.2f}".format(volume*(-float(getPrice(record,history_str))+price))+" | "
+	profit=volume*(-float(getPrice(record,history_str))+price)
 	return str0,profit
 
-def historyAnalysis(records):
+def historyAnalysis(records,history_str):
 	profit=0
 	for record in records:
+		
 		if record[0]=='买入':
-			text0,profit2=buying_analysis(record)
+			text0,profit2=buyingAnalysis(record,history_str)
 		else:
-			text0,profit2=selling_analysis(record)
+			text0,profit2=selling_analysis(record,history_str)
 		profit=profit+profit2
 	str0="，历史收益：{:.2f}".format(profit)
-	
+
 	return str0,profit
 
-def recentAnalysis(records):
+def recentAnalysis(records,history_str):
 	text=""
 	profit=0
 	profit0=0
 	profit1=0
 	for record in records:
 		if record[0]=='买入':
-			text0,profit2=buying_analysis(record)
+			text0,profit2=buyingAnalysis(record,history_str)
 			profit1=profit1+profit2
 		else:
-			text0,profit2=selling_analysis(record)
+			text0,profit2=selling_analysis(record,history_str)
 			profit0=profit0+profit2
 		text=text0+text
 		profit=profit1+profit0
@@ -86,18 +77,32 @@ def recentAnalysis(records):
 	text=text+str1
 	return text,profit
 
-history_records=[['卖出','sz300766',14.68,20000],['买入','sz300766',14.88,19700],['卖出','sz300766',14.51,19700],['买入','sz300766',14.36,19800],['卖出','sz300766',14.40,19800],['买入','sz300766',13.94,19800],['卖出','sz300987',34,8300],['买入','sz300766',13.02,20000],['买入','sz300987',31.688,8300],['卖出','sz300766',13.3,20000]]
-recent_operation=[['买入','sz300498',14.324,18100],['卖出','sz300766',13.01,20000]]
+def getData(records):
+	dic={}
+	for record in records:
+		dic[record[1]]=1#只取不重复值
+		dic[record[1]]=requests.get("http://hq.sinajs.cn/list=%s" % (record[1])).text.split(",")
+	return dic
+
+
+history_records=[['卖出','sz300498',14.71,16600],['卖出','sz300498',14.8,1500],['买入','sz300498',14.324,18100],['卖出','sz300766',13.01,20000],['卖出','sz300766',14.68,20000],['买入','sz300766',14.88,19700],['卖出','sz300766',14.51,19700],['买入','sz300766',14.36,19800],['卖出','sz300766',14.40,19800],['买入','sz300766',13.94,19800],['卖出','sz300987',34,8300],['买入','sz300766',13.02,20000],['买入','sz300987',31.688,8300],['卖出','sz300766',13.3,20000]]
+recent_operation=[['买入','sz300498',14.49,10100],['买入','sz300002',5.8,20600]]
 input("任意键开始")
 os.system("cls")
 
+global history_str
+global recent_str
 
-history_text,history_profit=historyAnalysis(history_records)
+history_str=getData(history_records)
+recent_str=getData(recent_operation)
+
+history_text,history_profit=historyAnalysis(history_records,history_str)
+
 msg0=""
 while True:
 	try:
 		
-		recent_text,recent_profit=recentAnalysis(recent_operation)
+		recent_text,recent_profit=recentAnalysis(recent_operation,recent_str)
 		
 		text=recent_text+history_text+"，操作总收益：{:.2f}".format(history_profit+recent_profit)
 		
