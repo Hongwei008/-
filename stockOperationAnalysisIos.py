@@ -2,9 +2,9 @@
 #Copyright@Hongwei008
 import requests
 import time
-import sys
+
 import appex, ui
-import socket
+
 def getName(record,history_str):
 	name= (history_str[record[1]])[0][21:]
 
@@ -30,7 +30,7 @@ def getRate(record,history_str):
 
 		
 def buyingAnalysis(record,history_str):
-	code=record[1]
+	
 	price=record[2]
 	volume=record[3]
 	str0=getName(record,history_str)+" "+getPrice(record,history_str)+" "+getRate(record,history_str)+" 买入收益：{:.2f}".format(volume*(float(getPrice(record,history_str))-price))+"\n "
@@ -38,7 +38,7 @@ def buyingAnalysis(record,history_str):
 	return str0,profit
 
 def selling_analysis(record,history_str):
-	code=record[1]
+	
 	price=record[2]
 	volume=record[3]
 	str0=getName(record,history_str)+" "+getPrice(record,history_str)+" "+getRate(record,history_str)+" 卖出收益：{:.2f}".format(volume*(-float(getPrice(record,history_str))+price))+"\n "
