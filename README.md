@@ -25,3 +25,12 @@
 
 
 ![image](https://github.com/Hongwei008/stock-operation-analysis/blob/main/%E6%95%88%E6%9E%9C%E5%9B%BE.png)
+
+
+2021年10月3日 00:31:46更新：  
+
+一、ios设备  
+
+为了在手机上也能实时看到收益情况，利用Pythonista做了一个小组件。代码见stockOperationAnalysisIos.py，效果图见下：  
+
+![image](https://github.com/Hongwei008/stock-operation-analysis/blob/main/ios%E6%95%88%E6%9E%9C%E5%9B%BE.jpg)
