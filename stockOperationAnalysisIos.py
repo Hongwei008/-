@@ -96,20 +96,13 @@ recent_str=getData(recent_operation)
 
 history_text,history_profit=historyAnalysis(history_records,history_str)
 
-msg0=""
 
 recent_text,recent_profit=recentAnalysis(recent_operation,recent_str)
 
 text=recent_text+history_text+"，操作总收益：{:.2f}".format(history_profit+recent_profit)
 
 msg="{} 更新：\n{}".format(time.strftime("%H:%M:%S", time.localtime()),text)
-if len(msg)>=len(msg0):
-	sys.stdout.write("\r{}".format(msg))
-else:
-	blanks="  "*(len(msg0)-len(msg))
-	sys.stdout.write("\r{}{}".format(msg,blanks))
-msg0=msg
-sys.stdout.flush()
+
 v = ui.View(frame=(0, 0, 320,300))
 label = ui.Label(frame=(0, 0, 320, 280),alignment=ui.ALIGN_CENTER,flex='wh')
 label.font = ('Menlo', 12)
